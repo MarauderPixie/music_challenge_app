@@ -29,6 +29,7 @@ challenge <- readr::read_csv("data/challenge.csv") %>%
                      # '<b>', rating, " ", artist, ' - ', track, '</b><br>',
                      '<b>', artist, ' - ', track, '</b><br>',
                      'Album: ', album, '<br>',
+                     'Dauer: ', dur_chr, '<br>',
                      'Released: ', released)
   )
 
@@ -80,7 +81,7 @@ ui <- fluidPage(
     # Selection
     sidebarPanel(
       h3(textOutput("feature")),
-      textOutput("feature_description"),
+      htmlOutput("feature_description"), 
       radioGroupButtons(
         "feature", "", justified = TRUE,
         choices = button_labels,
@@ -125,9 +126,10 @@ server <- function(input, output) {
            "Release Year" = "Simpel: Wann ist der Track erschienen? Leider mitunter stark verfälscht, 
                              weil ich Suchergebnisse von Spotify nicht besonders kuratiere und 
                              daher zB das Erscheinungsjahr eines Best-Ofs o.ä. angezeigt wird.",
-           "Duration"     = "Kommt von Haus aus in Millisekunden und wird auch so dargstellt,
+           "Duration"     = "<p>Jetzt in Minuten!</p>
+                             <strike>Kommt von Haus aus in Millisekunden und wird auch so dargstellt,
                              weil Programmieren in/mit/über Zeiteinheiten die Hölle ist.
-                             Dreieinhalbminuten sind zumindest 210.000ms.",
+                             Dreieinhalbminuten sind zumindest 210.000ms.</strike>",
            "Popularity"   = "Je populärer desto 100. Basierend darauf, wie oft ein Track in letzter Zeit
                              gespielt wurde. Tracks, die vor kurzem oft gespielt wurden, sind populärer, 
                              auch wenn ein anderer Track zwar öfter gespielt wurde, aber eben vor längerer
@@ -145,7 +147,7 @@ server <- function(input, output) {
   output$plot_person <- renderHighchart({
     challenge$y <- switch(input$feature,
                           "Release Year" = challenge$released,
-                          "Duration"     = challenge$dur_ms,
+                          "Duration"     = challenge$dur_ms / 60000,
                           "Popularity"   = challenge$popularity,
                           "Danceability" = challenge$danceability,
                           "Energy"       = challenge$energy,
@@ -156,7 +158,7 @@ server <- function(input, output) {
       input$feature,
       # [1] title;  [2] subtitle;  [3] yAxis title
       "Release Year" = c("Erscheinungsjahr", "mitunter verfälscht", "Jahr"),
-      "Duration"     = c("Dauer der Tracks", "60.000ms = 1 Minute", "Dauer (in ms)"),
+      "Duration"     = c("Dauer der Tracks", "", "Dauer (in Minuten)"),
       "Popularity"   = c("Pop Pop Pop Sofa", "", "Popularity"),
       "Danceability" = c("Aka der Bootyshake.Index", "shake your tailfeather", "Danceability"),
       "Energy"       = c("Berzerk vs, Slowpoke", "", "Energy"),
@@ -179,7 +181,7 @@ server <- function(input, output) {
   output$plot_days <- renderHighchart({
     challenge$y <- switch(input$feature,
                           "Release Year" = challenge$released,
-                          "Duration"     = challenge$dur_ms,
+                          "Duration"     = challenge$dur_ms / 60000,
                           "Popularity"   = challenge$popularity,
                           "Danceability" = challenge$danceability,
                           "Energy"       = challenge$energy,
@@ -190,7 +192,7 @@ server <- function(input, output) {
       input$feature,
       # [1] title;  [2] subtitle;  [3] yAxis title
       "Release Year" = c("Erscheinungsjahr", "mitunter verfälscht", "Jahr"),
-      "Duration"     = c("Dauer der Tracks", "60.000ms = 1 Minute", "Dauer (in ms)"),
+      "Duration"     = c("Dauer der Tracks", "", "Dauer (in Minuten)"),
       "Popularity"   = c("Pop Pop Pop Sofa", "", "Popularity"),
       "Danceability" = c("Aka der Bootyshake.Index", "shake your tailfeather", "Danceability"),
       "Energy"       = c("Berzerk vs, Slowpoke", "", "Energy"),
