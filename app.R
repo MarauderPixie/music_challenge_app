@@ -134,7 +134,7 @@ server <- function(input, output) {
                              Zeit. Im Gegensatz zu den anderen Variablen verändert sich die popularity also
                              auch im Laufe der Zeit.",
            "Danceability" = "Bildet ab was draufsteht: Danceability setzt sich zusammen aus Elementen wie
-                             Tempo, Rhythmusstabilität doer wie dominant der Beat ist.",
+                             Tempo, Rhythmusstabilität oder wie dominant der Beat ist.",
            "Energy"       = "Eine relative Angabe über die Intensität und Regsamkeit eines Tracks.",
            "Valence"      = "Tracks mit einer hohen Valenz sind musikalisch eher positiv und transportieren
                              Eigenschaften wie Glück, Fröhlichkeit oder sogar Euphorie. Niedrige Werte 
